@@ -6,3 +6,4 @@ zielony zielona niebieski niebieska granatowy granatowa czerwony czerwona zolta 
 mala male duza duze
 okragly okragle kwadratowe kwadratowy prostokatny prostokatne 
 przedmiot obiekt rzecz
+.

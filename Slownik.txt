@@ -1,0 +1,13 @@
+Słownik KCK
+
+1)Wózek
+Na wózku może znajdować się jeden przedmiot
+
+2)Przedmioty do ustawiania
+- Beczka
+- Puszka
+- Butelka
+	2.1)Przedmioty mają określone atrybuty
+		2.1.1) Kolor
+
+- szafka z półkami (4 półki na każdej szafce)

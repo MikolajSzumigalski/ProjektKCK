@@ -1,5 +1,6 @@
-rozkaz = input("Wpisz rozkaz: ")
+plik = open("slownik.txt", "r")
 
+rozkaz = input("Wpisz rozkaz: ")
 
 def potnij_tekst(text):
     words = text.split(" ")
@@ -8,7 +9,6 @@ def potnij_tekst(text):
 komendy = potnij_tekst(rozkaz)
 
 print(komendy)
-
 
 def przeszukuj(tekst):
     wsjo = []
@@ -26,3 +26,13 @@ def przeszukuj(tekst):
     return wsjo
 
 przeszukuj(rozkaz)
+
+napis = ""
+
+flag = False;
+
+while(flag == False):
+    for i in range(0, len(komendy)):
+        while(komendy[i] != plik.read())
+
+

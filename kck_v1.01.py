@@ -1,4 +1,4 @@
-#wersja 1.02
+#wersja 1.01
 #
 #poprawilem porownywarke, najpierw wrzuca do tablicy slowa w kolejnosci, w jakiej wystepuja w slowniku,
 #moze sie przydac przy rozczytywaniu intencji uzytownika

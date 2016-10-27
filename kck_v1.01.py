@@ -19,8 +19,8 @@ def otwieracz(nazwa_pliku):
 slownik = otwieracz('slownik.txt')
 
 
-#odczytanie komendy od uzytkownika
-rozkaz = input("Wpisz rozkaz: ")
+#odczytanie komendy od uzytkownika i zamiana duzych liter na male
+rozkaz = input("Wpisz rozkaz: ").lower()
 
 #wrzucenie rozkazu do tablicy
 def potnij_tekst(tekst):

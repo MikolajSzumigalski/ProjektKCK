@@ -1,0 +1,40 @@
+
+plik = open("polecenie.txt", "r").read
+
+
+slowa = ""
+
+with open('polecenie.txt', 'r') as f:
+    for line in f:
+        for word in line.split():
+            slowa += word
+            slowa += " "
+
+def potnij_tekst(text):
+    polecenia = text.split(" ")
+    return polecenia
+
+pociete = potnij_tekst(slowa)
+print(pociete)
+
+rozkaz = input("Wpisz rozkaz: ")
+komendy = potnij_tekst(rozkaz)
+
+
+
+def przeszukuj(text):
+    wsjo = []
+    flag = False
+    i = 0
+    j = 0
+    while range(i, len(komendy)) or flag == True:
+        while range(j, len(polecenia)):      #szukanie polecenia do pierwszego wystapienia
+            ifkomendy[i] != polecenia[j]:
+            i += 1
+            else: flag = True
+            return  komendy[i]
+
+
+st = przeszukuj(komendy)
+
+print(st)

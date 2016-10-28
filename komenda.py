@@ -1,38 +1,67 @@
-plik = open("slownik.txt", "r")
+magazyn = [["beczka",0,"beczka",0],[0,"skrzynka",0,0],[0,0,0,0],[0,0,0,0]] # magazyn 4x4 jako tablica
+prz = "" #string zapisujacy przedmiot
+pol = "" #string zapisujacy polecenie
+msc = "" #string zapisujacy miejsce
 
-rozkaz = input("Wpisz rozkaz: ")
+with open('przedmiot.txt', 'r') as f: #plik z przedmiotami
+    for line in f:
+        for word in line.split():
+            prz += word
+            prz += " "
 
-def potnij_tekst(text):
-    words = text.split(" ")
-    return words
+with open('polecenia.txt', 'r') as g: #plik z poleceniami
+    for line in g:
+        for word in line.split():
+            pol += word
+            pol += " "
 
-komendy = potnij_tekst(rozkaz)
+def potnij_tekst(text): #funkcja do dzielenia slow na pojedyncze
+    polecenia = text.split(" ")
+    return polecenia
 
+przedmiot = potnij_tekst(prz) #tu tniemy wszystko
+polecenie = potnij_tekst(pol) 
+
+
+rozkaz = raw_input("Wpisz rozkaz: ") # Pisalem w Geanny i jak bylo samo input to nie dzialalo...
+komendy = potnij_tekst(rozkaz) #yu tez tniemy polecenie
+
+
+def przeszukujpolecenie(text): #przeszukujemy polecenia, zwracamy i usuwamy je
+	i=0
+	j=0
+	for i in range(len(polecenie)):
+		for j in range(len(komendy)):      #szukanie polecenia do pierwszego wystapienia
+			if komendy[j] == polecenie[i]:
+				s = komendy[j]
+				komendy.remove(komendy[j])
+				return s
+	return 0
+	
+def przeszukujprzedmiot(text): #przeszukujemy przedmioty, zwracamy i usuwamy je
+	i=0
+	j=0
+	for i in range(len(przedmiot)):
+		for j in range(len(komendy)):      #szukanie przedmiotu do pierwszego wystapienia
+			if komendy[j] == przedmiot[i]:
+				s = komendy[j]
+				komendy.remove(komendy[j])
+				return s
+	return 0
+	
+def przeszukujmiejsce(text): #przeszukujemy miejsca, zwracamy i usuwamy je
+	i=0
+	j=0
+	for i in range(i, len(slownik)):
+		for j in range(j, len(komendy)):      #szukanie miejsca do pierwszego wystapienia
+			if komendy[j] == slownik[i]:
+				return komendy[j]	
+	return 0
+	
+print(komendy)	
+print(przeszukujpolecenie(komendy))
 print(komendy)
-
-def przeszukuj(tekst):
-    wsjo = []
-    if "przenies" in tekst:
-        print("przenosze")
-        wsjo += "przenosze"
-
-    if "ustaw" in tekst:
-        print("ustawiam")
-        wsjo += "ustawiam"
-
-    if "beczke" in tekst:
-        print("biore beczke")
-        wsjo += "beczke"
-    return wsjo
-
-przeszukuj(rozkaz)
-
-napis = ""
-
-flag = False;
-
-while(flag == False):
-    for i in range(0, len(komendy)):
-        while(komendy[i] != plik.read())
+print(przeszukujprzedmiot(komendy))
+print(komendy)
 
 

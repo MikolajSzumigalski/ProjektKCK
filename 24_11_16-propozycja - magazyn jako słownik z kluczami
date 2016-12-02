@@ -1,0 +1,108 @@
+magazyn1 = {'a1': "b", 'a2': 0, 'a3': 0, 'a4': 0, 'b1': 0, 'b2': 0, 'b3': 0,'b4': 0, 'c1': 0, 'c2': 0, 'c3': 0, 'c4': 0, 'd1': 0, 'd2': 0, 'd3': 0, 'd4': 0}
+# magazyn jako slownik z kluczami
+
+prz = ""  # string zapisujacy przedmiot
+pol = ""  # string zapisujacy polecenie
+mag = ""  # string zapisujacy miejsce
+
+
+with open('przedmiot.txt', 'r') as f:  # plik z przedmiotami
+    for line in f:
+        for word in line.split():
+            prz += word
+            prz += " "
+
+with open('polecenia.txt', 'r') as g:  # plik z poleceniami
+    for line in g:
+        for word in line.split():
+            pol += word
+            pol += " "
+
+with open('miejsce.txt', 'r') as m:  # plik z poleceniami
+    for line in m:
+        for word in line.split():
+            mag += word
+            mag += " "
+
+
+def potnij_tekst(text):  # funkcja do dzielenia slow na pojedyncze
+    polecenia = text.split(" ")
+    return polecenia
+
+
+# tu tniemy wszystko
+przedmiot = potnij_tekst(prz)
+polecenie = potnij_tekst(pol)
+magazyn = potnij_tekst(mag)
+
+rozkaz = raw_input("Wpisz rozkaz: ")  # Pisalem w Geanny i jak bylo samo input to nie dzialalo...
+rozkaz = rozkaz.lower()
+komendy = potnij_tekst(rozkaz)  # yu tez tniemy polecenie
+print komendy
+
+def przeszukujpolecenie():  # przeszukujemy polecenia, zwracamy i usuwamy je
+    i = 0
+    j = 0
+    for i in range(len(polecenie)):
+        for j in range(len(komendy)):  # szukanie polecenia do pierwszego wystapienia
+            if komendy[j] == polecenie[i]:
+                s = komendy[j]
+                komendy.remove(komendy[j])
+                return s
+    return 0
+
+
+def przeszukujprzedmiot():  # przeszukujemy przedmioty, zwracamy i usuwamy je
+    i = 0
+    j = 0
+    for i in range(len(przedmiot)):
+        for j in range(len(komendy)):  # szukanie przedmiotu do pierwszego wystapienia
+            if komendy[j] == przedmiot[i]:
+                s = komendy[j]
+                komendy.remove(komendy[j])
+                return s
+    return 0
+
+
+def przeszukujmiejsce():
+    for i in range(len(komendy)):
+        if (komendy[i] == "z"):
+            for j in range(i, len(komendy)):
+                for k in range(len(magazyn)):
+                    if komendy[j] == magazyn[k]:
+                        return komendy[j]
+    return 0
+
+def przeszukujmiejsce2():
+    for i in range(len(komendy)):
+        if (komendy[i] == ("na" or "do")):
+            for j in range(i, len(komendy)):
+                for k in range(len(magazyn)):
+                    if komendy[j] == magazyn[k]:
+                        return komendy[j]
+    return 0
+
+
+print(komendy)
+print(przeszukujpolecenie())
+print(komendy)
+print(przeszukujprzedmiot())
+print(komendy)
+
+skad = przeszukujmiejsce()
+print(skad)
+
+cel = przeszukujmiejsce2()
+print(cel)
+
+for key in sorted(magazyn1):
+    print "%s: %s" % (key, magazyn1[key]) #wyswietla magazyn w formie pierwotnej
+
+
+if (magazyn1[(skad)] == "b"): #jesli na wskazanym miejscu jest przedmiot to przenosi go na miejsce podane w poleceniu
+    magazyn1[(skad)] = 0
+    magazyn1[(cel)] = "b"
+    for key in sorted(magazyn1):
+        print "%s: %s" % (key, magazyn1[key]) #wyswietla magazyn po przeniesieniu przedmiotu
+else:
+    print "Brak wskazanego przedmiotu na podanym miejscu"

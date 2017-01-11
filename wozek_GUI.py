@@ -5,78 +5,114 @@ slownik_przedmiot = otwieracz.potnijPlik("przedmiot.txt")
 slownik_polecenie = otwieracz.potnijPlik("czynnosci.txt")
 slownik_magazyn = otwieracz.klucze(magazyn.miejsca)
 
-class Application(Frame):
-    def __init__(self, okno):
-        super(Application, self).__init__(okno)
-        self.grid()
-        self.okno_polecenia()
+# szerokosc magazynu - 580px, wysokosc - 450px, 9 kolumn 4 rzedy
+# i oraz j oznaczaja rozmiary miejsc w px, i - wysokosc, j - szerokosc
+def rysuj_magazyn():
+    x = 0
+    for i in range(60, 420, 90):  # 360/90 = 4 rzedy: A B C D
+        for j in range(20, 560, 60):  # 540/60 = 9 kolumn
+            # dodac funkcje if, ktora przeleci po magazynie i tam gdzie bedzie pusto dac szary kwadrat,
+            # a tam gdzie cos jest, da czerwony
+            if magazyn.tab_miejsca[x] == 0:
+                w.create_rectangle(j, i, j + 45, i + 65, fill="grey")
+            else:
+                w.create_rectangle(j, i, j + 45, i + 65, fill="red")
+            x += 1
 
-    def okno_polecenia(self):
-        Label(self, text = "Wpisz polecenie: ").grid(row=0, column=0, sticky=W)
-        self.polecenie_txt = Entry(self, width=50)
-        self.polecenie_txt.grid(row=1,  column=0, columnspan=2, sticky=W)
+okno = Tk()
+okno.geometry("600x800")
+okno.title("Widlak")
 
-        self.wyslij = Button(self, text = "Wyslij",  command = self.wykonaj)
-        self.wyslij.grid(row=2, column=0, sticky=W)
+w = Canvas(okno, width=580, height=450, bg="yellow")
+w.place(x=5, y=300)
 
-        Label(self, text="Przedmiot: ").grid(row=4, column=0, sticky=W)
-        self.przedmiot = Text(self, width=30, height=1, wrap=WORD)
-        self.przedmiot.grid(row=4, column=1, sticky=W)
+rysuj_magazyn()
 
-        Label(self, text="Przedmiot: ").grid(row=4, column=0, sticky=W)
-        self.przedmiot = Text(self, width=30, height=1, wrap=WORD)
-        self.przedmiot.grid(row=4, column=1, sticky=W)
+def wykonaj():
+    rozkaz_pociete = polecenie_txt.get().split(" ")
 
-        Label(self, text="Skąd: ").grid(row=5, column=0, sticky=W)
-        self.skad = Text(self, width=30, height=1, wrap=WORD)
-        self.skad.grid(row=5, column=1, sticky=W)
+    polecenie_szukaj = str(szukacz.przeszukujPolecenie(slownik_polecenie, rozkaz_pociete))
+    przedmiot_szukaj = str(szukacz.przeszukujPolecenie(slownik_przedmiot, rozkaz_pociete))
 
-        Label(self, text="Dokąd: ").grid(row=6, column=0, sticky=W)
-        self.dokad = Text(self, width=30, height=1, wrap=WORD)
-        self.dokad.grid(row=6, column=1, sticky=W)
+    miejsce_skad = str(szukacz.przeszukujMiejsceSkad(slownik_magazyn, rozkaz_pociete, "z"))
+    miejsce_dokad = str(szukacz.przeszukujMiejsceDokad(slownik_magazyn, rozkaz_pociete))
 
-        Label(self, text="Efekt: ").grid(row=7, column=0, sticky=W)
-        self.efekt = Text(self, width=30, height=2, wrap=WORD)
-        self.efekt.grid(row=7, column=1, sticky=W)
+    stan_wozka = str(magazyn.stan_wozka())
 
+    if stan_wozka == 1:
+        magazyn.zmien_stan_wozka(przedmiot_szukaj)
 
-    def wykonaj(self):
+    wozek = ""
+    wozek += stan_wozka
+    txt_wozek.delete(0.0, END)
+    txt_wozek.insert(0.0, wozek)
 
-        rozkaz_pociete = self.polecenie_txt.get().split(" ")
+    skad = ""
+    skad += miejsce_skad
+    txt_skad.delete(0.0, END)
+    txt_skad.insert(0.0, skad)
 
-        polecenie_szukaj = str(szukacz.przeszukujPolecenie(slownik_polecenie, rozkaz_pociete))
-        przedmiot_szukaj = str(szukacz.przeszukujPolecenie(slownik_przedmiot, rozkaz_pociete))
+    dokad = ""
+    dokad += miejsce_dokad
+    txt_dokad.delete(0.0, END)
+    txt_dokad.insert(0.0, dokad)
 
-        miejsce_skad = str(szukacz.przeszukujMiejsceSkad(slownik_magazyn, rozkaz_pociete, "z"))
-        miejsce_dokad = str(szukacz.przeszukujMiejsceDokad(slownik_magazyn, rozkaz_pociete))
+    przedmiot = ""
+    przedmiot += przedmiot_szukaj
+    txt_przedmiot.delete(0.0, END)
+    txt_przedmiot.insert(0.0, przedmiot)
 
-        magazyn.wypisz(magazyn.miejsca)
+    polecenie = ""
+    polecenie += polecenie_szukaj
+    txt_polecenie.delete(0.0, END)
+    txt_polecenie.insert(0.0, polecenie)
 
-        skad = ""
-        skad += miejsce_skad
-        self.skad.delete(0.0, END)
-        self.skad.insert(0.0, skad)
+    efekt = ""
+    efekt += str(magazyn.przemiesc(miejsce_skad, miejsce_dokad))
+    txt_efekt.delete(0.0, END)
+    txt_efekt.insert(0.0, efekt)
+    magazyn.przemiesc(miejsce_skad, miejsce_dokad)
+    # magazyn.wypisz(magazyn.miejsca)
+    magazyn.miejsca_do_tablicy(magazyn.miejsca)
+    rysuj_magazyn()
+    print(magazyn.tab_miejsca)
 
-        dokad = ""
-        dokad += miejsce_dokad
-        self.dokad.delete(0.0, END)
-        self.dokad.insert(0.0, dokad)
+lbl_pol = Label(okno, text = "Wpisz polecenie: ")
+lbl_pol.place(x=5, y=20)
+polecenie_txt = Entry(okno, width=30)
+polecenie_txt.place(x=120, y=20)
 
-        przedmiot = ""
-        przedmiot += przedmiot_szukaj
-        self.przedmiot.delete(0.0, END)
-        self.przedmiot.insert(0.0, przedmiot)
+btn_wyslij = Button(okno, text = "Wykonaj",  command = wykonaj)
+btn_wyslij.place(x=120, y=50)
 
-        efekt = ""
-        efekt += str(magazyn.przemiesc(miejsce_skad, miejsce_dokad))
-        self.efekt.delete(0.0, END)
-        self.efekt.insert(0.0, efekt)
+lbl_wozek = Label(okno, text="Wózek: ")
+lbl_wozek.place(x=5, y=80)
+txt_wozek = Text(okno, width=30, height=1, wrap=WORD)
+txt_wozek.place(x=120, y=80)
 
+lbl_przedmiot = Label(okno, text="Przedmiot: ")
+lbl_przedmiot.place(x=5, y=110)
+txt_przedmiot = Text(okno, width=30, height=1, wrap=WORD)
+txt_przedmiot.place(x=120, y=110)
 
-root = Tk()
-root.title("Wózek widłowy")
-root.geometry("500x300")
-app = Application(root)
-magazyn.wypisz(magazyn.miejsca)
-root.mainloop()
+lbl_czynnosc = Label(okno, text="Czynność: ")
+lbl_czynnosc.place(x=5, y=140)
+txt_polecenie = Text(okno, width=30, height=1, wrap=WORD)
+txt_polecenie.place(x=120, y=140)
 
+skad_lbl = Label(okno, text="Skąd: ")
+skad_lbl.place(x=5, y=170)
+txt_skad = Text(okno, width=30, height=1, wrap=WORD)
+txt_skad.place(x=120, y=170)
+
+lbl_dokad = Label(okno, text="Dokąd: ")
+lbl_dokad.place(x=5, y=200)
+txt_dokad = Text(okno, width=30, height=1, wrap=WORD)
+txt_dokad.place(x=120, y=200)
+
+lbl_efekt = Label(okno, text="Efekt: ")
+lbl_efekt.place(x=5, y=230)
+txt_efekt = Text(okno, width=30, height=2, wrap=WORD)
+txt_efekt.place(x=120, y=230)
+
+okno.mainloop()

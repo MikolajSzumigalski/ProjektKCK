@@ -20,10 +20,23 @@ def rysuj_magazyn():
                 w.create_rectangle(x + 10, y + 20, x + 35, y + 23, fill="black")
                 w.create_rectangle(x + 10, y + 40, x + 35, y + 43, fill="black")
                 w.create_text(x+22, y+32, fill="black", font="Times 15 italic bold", text="B")
-            else:
+            elif magazyn.tab_miejsca[i] == "puszka":
                 w.create_rectangle(x, y, x + 45, y + 65, fill="grey")
                 w.create_rectangle(x + 10, y + 15, x + 35, y + 50, fill="darkgrey")
                 w.create_text(x + 22, y + 32, fill="black", font="Times 15 italic bold", text="P")
+            elif magazyn.tab_miejsca[i] == "pudelko":
+                w.create_rectangle(x, y, x + 45, y + 65, fill="grey")
+                w.create_rectangle(x + 10, y + 20, x + 35, y + 45, fill="red")
+                w.create_text(x + 22, y + 35, fill="black", font="Times 15 italic bold", text="P")
+            elif magazyn.tab_miejsca[i] == "butelka":
+                w.create_rectangle(x, y, x + 45, y + 65, fill="grey")
+                w.create_rectangle(x + 10, y + 25, x + 35, y + 50, fill="lightblue")
+                w.create_rectangle(x + 18, y + 15, x + 27, y + 25, fill="lightblue")
+                w.create_text(x + 22, y + 38, fill="black", font="Times 15 italic bold", text="B")
+            else:
+                w.create_rectangle(x, y, x + 45, y + 65, fill="grey")
+                w.create_oval(x + 10, y + 20, x + 35, y + 45, fill="black")
+                w.create_text(x + 22, y + 34, fill="white", font="Times 15 italic bold", text="O")
             i += 1
 
 #inicjuje GUI

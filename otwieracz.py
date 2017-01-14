@@ -10,3 +10,10 @@ def potnijPlik(plik):
                 wynik += " "
                 pociete = wynik.split(" ")
     return pociete
+
+# wrzuca do tablicy miejsca w magazynie (klucze)
+def klucze(slownik):
+    t = []
+    for k in slownik:
+        t.append(k)
+    return t

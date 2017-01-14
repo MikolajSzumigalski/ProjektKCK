@@ -31,9 +31,9 @@ def stan_wozka():
     return wozek['stan']
 
 # jak jest wolny to wrzuc na niego przedmiot
-def zmien_stan_wozka(przedmiot):
-    wozek['stan'] = przedmiot
-    print (wozek['stan'])
+def zmien_stan_wozka(stan):
+    wozek['stan'] = stan
+    return wozek['stan']
 
 def zmien_polozenie_wozka(x, y):
     wozek['x'] = x

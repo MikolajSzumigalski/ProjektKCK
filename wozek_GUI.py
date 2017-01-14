@@ -1,5 +1,5 @@
 import otwieracz, magazyn, szukacz
-from tkinter import *
+from tkinter import * #biblioteka ktora obsluguje GUI
 
 slownik_przedmiot = otwieracz.potnijPlik("przedmiot.txt")
 slownik_polecenie = otwieracz.potnijPlik("czynnosci.txt")
@@ -8,17 +8,18 @@ slownik_magazyn = otwieracz.klucze(magazyn.miejsca)
 # szerokosc magazynu - 580px, wysokosc - 450px, 9 kolumn 4 rzedy
 # i oraz j oznaczaja rozmiary miejsc w px, i - wysokosc, j - szerokosc
 def rysuj_magazyn():
-    x = 0
-    for i in range(60, 420, 90):  # 360/90 = 4 rzedy: A B C D
-        for j in range(20, 560, 60):  # 540/60 = 9 kolumn
+    i = 0
+    for y in range(60, 420, 90):  # 360/90 = 4 rzedy: A B C D
+        for x in range(20, 560, 60):  # 540/60 = 9 kolumn
             # dodac funkcje if, ktora przeleci po magazynie i tam gdzie bedzie pusto dac szary kwadrat,
             # a tam gdzie cos jest, da czerwony
-            if magazyn.tab_miejsca[x] == 0:
-                w.create_rectangle(j, i, j + 45, i + 65, fill="grey")
+            if magazyn.tab_miejsca[i] == 0:
+                w.create_rectangle(x, y, x + 45, y + 65, fill="grey")
             else:
-                w.create_rectangle(j, i, j + 45, i + 65, fill="red")
-            x += 1
+                w.create_rectangle(x, y, x + 45, y + 65, fill="red")
+            i += 1
 
+#inicjuje GUI
 okno = Tk()
 okno.geometry("600x800")
 okno.title("Widlak")
@@ -26,9 +27,13 @@ okno.title("Widlak")
 w = Canvas(okno, width=580, height=450, bg="yellow")
 w.place(x=5, y=300)
 
+#wozek
+w.create_rectangle(400, 400, 480, 480, fill="black")
+
 rysuj_magazyn()
 
 def wykonaj():
+
     rozkaz_pociete = polecenie_txt.get().split(" ")
 
     polecenie_szukaj = str(szukacz.przeszukujPolecenie(slownik_polecenie, rozkaz_pociete))
@@ -39,8 +44,7 @@ def wykonaj():
 
     stan_wozka = str(magazyn.stan_wozka())
 
-    if stan_wozka == 1:
-        magazyn.zmien_stan_wozka(przedmiot_szukaj)
+    magazyn.zmien_stan_wozka(przedmiot_szukaj)
 
     wozek = ""
     wozek += stan_wozka
@@ -76,6 +80,7 @@ def wykonaj():
     magazyn.miejsca_do_tablicy(magazyn.miejsca)
     rysuj_magazyn()
     print(magazyn.tab_miejsca)
+    print(magazyn.stan_wozka())
 
 lbl_pol = Label(okno, text = "Wpisz polecenie: ")
 lbl_pol.place(x=5, y=20)

@@ -15,8 +15,10 @@ def rysuj_magazyn():
             # a tam gdzie cos jest, da czerwony
             if magazyn.tab_miejsca[i] == 0:
                 w.create_rectangle(x, y, x + 45, y + 65, fill="grey")
-            else:
+            elif magazyn.tab_miejsca[i] == "b":
                 w.create_rectangle(x, y, x + 45, y + 65, fill="red")
+            else:
+                w.create_rectangle(x, y, x + 45, y + 65, fill="purple")
             i += 1
 
 #inicjuje GUI
@@ -35,8 +37,7 @@ rysuj_magazyn()
 def wykonaj():
 
     rozkaz_pociete = polecenie_txt.get().split(" ")
-    rozkaz_pociete = [w.replace(',', '').replace('.', '') for w in rozkaz_pociete] #usuwanie kropek i przecinkow
-
+    rozkaz_pociete = [w.replace(',', '').replace('.', '') for w in rozkaz_pociete]
 
     polecenie_szukaj = str(szukacz.przeszukujPolecenie(slownik_polecenie, rozkaz_pociete))
     przedmiot_szukaj = str(szukacz.przeszukujPolecenie(slownik_przedmiot, rozkaz_pociete))

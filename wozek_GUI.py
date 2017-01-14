@@ -57,20 +57,12 @@ def wykonaj():
     rozkaz_pociete = polecenie_txt.get().split(" ")
     rozkaz_pociete = [w.replace(',', '').replace('.', '') for w in rozkaz_pociete]
 
-    polecenie_szukaj = str(szukacz.przeszukujPolecenie(przedmioty.beczka, rozkaz_pociete))
+    polecenie_szukaj = str(szukacz.przeszukujPolecenie(slownik_polecenie, rozkaz_pociete))
     przedmiot_szukaj = str(szukacz.przeszukujPolecenie(slownik_przedmiot, rozkaz_pociete))
 
     miejsce_skad = str(szukacz.przeszukujMiejsceSkad(slownik_magazyn, rozkaz_pociete, "z"))
     miejsce_dokad = str(szukacz.przeszukujMiejsceDokad(slownik_magazyn, rozkaz_pociete))
 
-    stan_wozka = str(magazyn.stan_wozka())
-
-    magazyn.zmien_stan_wozka(przedmiot_szukaj)
-
-    wozek = ""
-    wozek += stan_wozka
-    txt_wozek.delete(0.0, END)
-    txt_wozek.insert(0.0, wozek)
 
     skad = ""
     skad += miejsce_skad
@@ -93,15 +85,25 @@ def wykonaj():
     txt_polecenie.insert(0.0, polecenie)
 
     efekt = ""
-    efekt += str(magazyn.przemiesc(miejsce_skad, miejsce_dokad))
+    efekt += str(magazyn.przemiesc(miejsce_skad, miejsce_dokad, przedmiot_szukaj, polecenie_szukaj))
     txt_efekt.delete(0.0, END)
     txt_efekt.insert(0.0, efekt)
-    magazyn.przemiesc(miejsce_skad, miejsce_dokad)
+    magazyn.przemiesc(miejsce_skad, miejsce_dokad, przedmiot_szukaj, polecenie_szukaj)
     # magazyn.wypisz(magazyn.miejsca)
+
+    cel = szukacz.przeszukujMiejsceDokad(slownik_magazyn, rozkaz_pociete)
+    stan_wozka = str(magazyn.stan_wozka())
+    wozek = ""
+    wozek += stan_wozka
+    txt_wozek.delete(0.0, END)
+    txt_wozek.insert(0.0, wozek)
+
     magazyn.miejsca_do_tablicy(magazyn.miejsca)
     rysuj_magazyn()
     print(magazyn.tab_miejsca)
     print(magazyn.stan_wozka())
+    print(magazyn.polozenie_wozka())
+
 
 lbl_pol = Label(okno, text = "Wpisz polecenie: ")
 lbl_pol.place(x=5, y=20)

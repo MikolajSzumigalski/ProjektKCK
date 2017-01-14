@@ -35,6 +35,8 @@ rysuj_magazyn()
 def wykonaj():
 
     rozkaz_pociete = polecenie_txt.get().split(" ")
+    rozkaz_pociete = [w.replace(',', '').replace('.', '') for w in rozkaz_pociete] #usuwanie kropek i przecinkow
+
 
     polecenie_szukaj = str(szukacz.przeszukujPolecenie(slownik_polecenie, rozkaz_pociete))
     przedmiot_szukaj = str(szukacz.przeszukujPolecenie(slownik_przedmiot, rozkaz_pociete))

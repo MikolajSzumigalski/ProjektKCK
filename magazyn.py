@@ -9,9 +9,9 @@ tab_miejsca = []
 def miejsca_do_tablicy(magazyn):
     for key in sorted(magazyn):
         if magazyn[key] == "b":
-            tab_miejsca.append(1)
+            tab_miejsca.append("b")
         elif magazyn[key] == "c":
-            tab_miejsca.append(2)
+            tab_miejsca.append("c")
         else:
             tab_miejsca.append(0)
 miejsca_do_tablicy(miejsca)
@@ -64,34 +64,12 @@ def wypisz(stan_magazynu):
 #1. mamy podane 'skąd' i 'cel' oraz wózek jest wolny; przedmiot znajduje się w miejscu 'skąd' a miejsce 'cel' jest puste
 #2. kiedy nie mamy podane 'skąd', ale mamy podany 'cel' i na wózku znajduje się towar
 def przemiesc(skad=None, cel=None):
-    if stan_wozka() == 0:
-        if skad != None:
-            if (miejsca[(skad)] != 0): #jesli na wskazanym miejscu w magazynie "skąd" jest przedmiot, to przenosimy we wskazane miejsce
-                miejsca[(cel)] = "b"
-                miejsca[(skad)] = 0
-                if cel==None:
-                    return ("Przedmiot na wózku")
-                else:
-                    x = 0
-                    for k in sorted(miejsca):
-                        if skad != k:
-                            x += 1
-                        else:
-                            tab_miejsca[x] = 0
-                    x = 0
-                    for k in sorted(miejsca):
-                        if cel != k:
-                            x += 1
-                        else:
-                            tab_miejsca[x] = 1
-                    return ("Przeniesiono z ", skad, " na ", cel)
 
-    # skopiowane tylko do sprawdzenia stanu wózka, trzeba przerobić
-    elif stan_wozka() != 0:
         if skad != None:
             if (miejsca[(skad)] != 0): #jesli na wskazanym miejscu w magazynie "skąd" jest przedmiot, to przenosimy we wskazane miejsce
-                miejsca[(cel)] = "b"
-                miejsca[(skad)] = 0
+                miejsca[(cel)] = miejsca[(skad)]
+                print(miejsca[(skad)])
+
                 if cel==None:
                     return ("Przedmiot na wózku")
                 else:
@@ -106,10 +84,11 @@ def przemiesc(skad=None, cel=None):
                         if cel != k:
                             x += 1
                         else:
-                            tab_miejsca[x] = 1
+                            tab_miejsca[x] = miejsca[(skad)]
+                    miejsca[(skad)] = 0
                     return ("Przeniesiono z ", skad, " na ", cel)
-    else:
-        return ("Brak wskazanego przedmiotu na podanym miejscu")
+        else:
+            return ("Brak wskazanego przedmiotu na podanym miejscu")
 
 
 """"

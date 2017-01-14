@@ -73,7 +73,7 @@ def wypisz(stan_magazynu):
 
 def przemiesc(skad=None, cel=None, przedmiot=None, polecenie=None):
     if stan_wozka() == 0 and skad != "0" and cel != "0" and przedmiot != "[]" and polecenie != "[]":
-        if miejsca[(skad)] == przedmiot[2] and miejsca[(cel)] == 0:  #jesli na wskazanym miejscu w magazynie "skąd" jest przedmiot, to przenosimy we wskazane miejsce
+        if "['"+miejsca[(skad)]+"']" == przedmiot and miejsca[(cel)] == 0:  #jesli na wskazanym miejscu w magazynie "skąd" jest przedmiot, to przenosimy we wskazane miejsce
             miejsca[(cel)] = miejsca[(skad)]
             print(miejsca[(skad)])
             x = 0
@@ -88,10 +88,10 @@ def przemiesc(skad=None, cel=None, przedmiot=None, polecenie=None):
                     x += 1
                 else:
                     tab_miejsca[x] = miejsca[(skad)]
-            miejsca[(skad)] = 0
+            miejsca[(skad)] = "0"
             zmien_stan_wozka(0)
             return ("Przeniosłem ", przedmiot," z ", skad, " na ", cel)
-        elif miejsca[(skad)] != przedmiot[2]:
+        elif "['"+miejsca[(skad)]+"']" == przedmiot:
             zmien_stan_wozka(0)
             return ("Brak wskazanego przedmiotu na podanym miejscu")
         elif miejsca[(cel)] != 0:
@@ -104,24 +104,24 @@ def przemiesc(skad=None, cel=None, przedmiot=None, polecenie=None):
         zmien_stan_wozka(0)
         return ("Jestem przy polu ", cel)
     elif stan_wozka() == 0 and skad != "0" and przedmiot != "[]" and polecenie != "[]":
-        if miejsca[(skad)] == przedmiot[2]:
+        if "['"+miejsca[(skad)]+"']" == przedmiot: # to jest pojebane, ale muszą te nawiasy być XD
             x = 0
             for k in sorted(miejsca):
                 if skad != k:
                     x += 1
                 else:
                     tab_miejsca[x] = 0
-            zmien_stan_wozka(przedmiot[2])
+            zmien_stan_wozka(przedmiot)
             return ("Wziąłem ", przedmiot)
         else:
             zmien_stan_wozka(0)
             return("Brak wskazanego przedmiotu na podanym miejscu")
     elif stan_wozka() != 0:
         if cel == "0":
-            zmien_stan_wozka(przedmiot[2])
+            zmien_stan_wozka(przedmiot)
             return ("Wózek jest zajęty")
         elif miejsca[(cel)] != 0:
-            zmien_stan_wozka(przedmiot[2])
+            zmien_stan_wozka(przedmiot)
             return ("Miejsce docelowe jest zajęte")
         elif miejsca[(cel)] == 0:
             x = 0
@@ -129,9 +129,10 @@ def przemiesc(skad=None, cel=None, przedmiot=None, polecenie=None):
                 if cel != k:
                     x += 1
                 else:
-                    tab_miejsca[x] = przedmiot[2]
+                    stan =stan_wozka().replace("[", "").replace("]", "").replace("'", "")
+                    tab_miejsca[x] = stan
             zmien_stan_wozka(0)
-            return("Postawiłem ", przedmiot, " na polu ", cel)
+            return("Postawiłem ", stan, " na polu ", cel)
         else:
 
             return("Nie rozumiem, doprecyzuj polecenie")

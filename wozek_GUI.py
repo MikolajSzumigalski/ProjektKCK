@@ -1,4 +1,4 @@
-import otwieracz, magazyn, szukacz
+import otwieracz, magazyn, szukacz, przedmioty
 from tkinter import * #biblioteka ktora obsluguje GUI
 slownik_przedmiot = otwieracz.potnijPlik("przedmiot.txt")
 slownik_polecenie = otwieracz.potnijPlik("czynnosci.txt")
@@ -14,14 +14,16 @@ def rysuj_magazyn():
             # a tam gdzie cos jest, da czerwony
             if magazyn.tab_miejsca[i] == 0:
                 w.create_rectangle(x, y, x + 45, y + 65, fill="grey")
-            elif magazyn.tab_miejsca[i] == "b":
+            elif magazyn.tab_miejsca[i] == "beczka":
                 w.create_rectangle(x, y, x + 45, y + 65, fill="grey")
                 w.create_rectangle(x + 10, y + 15, x + 35, y + 50, fill="brown")
                 w.create_rectangle(x + 10, y + 20, x + 35, y + 23, fill="black")
                 w.create_rectangle(x + 10, y + 40, x + 35, y + 43, fill="black")
-                w.create_text(x+22, y+32, fill="black", font="Times 15 italic bold", text="b")
+                w.create_text(x+22, y+32, fill="black", font="Times 15 italic bold", text="B")
             else:
-                w.create_rectangle(x, y, x + 45, y + 65, fill="purple")
+                w.create_rectangle(x, y, x + 45, y + 65, fill="grey")
+                w.create_rectangle(x + 10, y + 15, x + 35, y + 50, fill="darkgrey")
+                w.create_text(x + 22, y + 32, fill="black", font="Times 15 italic bold", text="P")
             i += 1
 
 #inicjuje GUI
@@ -42,7 +44,7 @@ def wykonaj():
     rozkaz_pociete = polecenie_txt.get().split(" ")
     rozkaz_pociete = [w.replace(',', '').replace('.', '') for w in rozkaz_pociete]
 
-    polecenie_szukaj = str(szukacz.przeszukujPolecenie(slownik_polecenie, rozkaz_pociete))
+    polecenie_szukaj = str(szukacz.przeszukujPolecenie(przedmioty.beczka, rozkaz_pociete))
     przedmiot_szukaj = str(szukacz.przeszukujPolecenie(slownik_przedmiot, rozkaz_pociete))
 
     miejsce_skad = str(szukacz.przeszukujMiejsceSkad(slownik_magazyn, rozkaz_pociete, "z"))

@@ -1,6 +1,5 @@
 import otwieracz, magazyn, szukacz
 from tkinter import * #biblioteka ktora obsluguje GUI
-
 slownik_przedmiot = otwieracz.potnijPlik("przedmiot.txt")
 slownik_polecenie = otwieracz.potnijPlik("czynnosci.txt")
 slownik_magazyn = otwieracz.klucze(magazyn.miejsca)
@@ -16,7 +15,11 @@ def rysuj_magazyn():
             if magazyn.tab_miejsca[i] == 0:
                 w.create_rectangle(x, y, x + 45, y + 65, fill="grey")
             elif magazyn.tab_miejsca[i] == "b":
-                w.create_rectangle(x, y, x + 45, y + 65, fill="red")
+                w.create_rectangle(x, y, x + 45, y + 65, fill="grey")
+                w.create_rectangle(x + 10, y + 15, x + 35, y + 50, fill="brown")
+                w.create_rectangle(x + 10, y + 20, x + 35, y + 23, fill="black")
+                w.create_rectangle(x + 10, y + 40, x + 35, y + 43, fill="black")
+                w.create_text(x+22, y+32, fill="black", font="Times 15 italic bold", text="b")
             else:
                 w.create_rectangle(x, y, x + 45, y + 65, fill="purple")
             i += 1

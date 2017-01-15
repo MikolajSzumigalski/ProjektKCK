@@ -1,4 +1,4 @@
-import otwieracz, magazyn, szukacz, przedmioty
+import otwieracz, magazyn, szukacz
 from tkinter import * #biblioteka ktora obsluguje GUI
 slownik_przedmiot = otwieracz.potnijPlik("przedmiot.txt")
 slownik_polecenie = otwieracz.potnijPlik("czynnosci.txt")
@@ -37,6 +37,8 @@ def rysuj_magazyn():
                 w.create_rectangle(x, y, x + 45, y + 65, fill="grey")
                 w.create_oval(x + 10, y + 20, x + 35, y + 45, fill="black")
                 w.create_text(x + 22, y + 34, fill="white", font="Times 15 italic bold", text="O")
+            magazyn.pozycje_wozka.append(x)
+            magazyn.pozycje_wozka.append(y)
             i += 1
 
 #inicjuje GUI
@@ -47,8 +49,8 @@ okno.title("Widlak")
 w = Canvas(okno, width=580, height=450, bg="yellow")
 w.place(x=5, y=300)
 
-#wozek
-w.create_rectangle(400, 400, 480, 480, fill="black")
+#rysuje czarny wózek na dole
+woz = w.create_rectangle(magazyn.xy_wozka[0], magazyn.xy_wozka[1], magazyn.xy_wozka[0]+45, magazyn.xy_wozka[1]+25, fill="black")
 
 rysuj_magazyn()
 
@@ -100,10 +102,18 @@ def wykonaj():
 
     magazyn.miejsca_do_tablicy(magazyn.miejsca)
     rysuj_magazyn()
+
     print(magazyn.tab_miejsca)
     print(magazyn.stan_wozka())
     print(magazyn.polozenie_wozka())
 
+    # wozek - zmienia koordynaty
+    w.coords(woz, magazyn.xy_wozka[0], magazyn.xy_wozka[1]-25, magazyn.xy_wozka[0]+45, magazyn.xy_wozka[1])
+    # wozek - zmienia kolor zaleznie od jego stanu
+    if magazyn.stan_wozka() != 0:
+        w.itemconfig(woz, fill="red")
+    elif magazyn.stan_wozka() == 0:
+        w.itemconfig(woz, fill="black")
 
 lbl_pol = Label(okno, text = "Wpisz polecenie: ")
 lbl_pol.place(x=5, y=20)

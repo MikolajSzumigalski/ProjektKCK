@@ -25,6 +25,10 @@ miejsca_do_tablicy(miejsca)
 # OBSŁUGA WÓZKA:
 # 1. robimy wózek widłowy
 wozek = {'x': 0, 'y': 0, 'stan' : 0}
+# tablica ze wszystkimi mozliwymi pozycjami wózka - tam gdzie są jakies miejsca na magazynie
+pozycje_wozka = []
+# tablica ze wspolrzednymi x i y wózka, do ktorych sie bedzie teleportowal, zmienia sie po kazdej komendzie
+xy_wozka = [290, 420]
 
 # sprawdzamy stan - czy wozek jest wolny
 def stan_wozka():
@@ -35,10 +39,12 @@ def zmien_stan_wozka(stan):
     wozek['stan'] = stan
     return wozek['stan']
 
+# to juz chyba jest niepotrzebne
 def zmien_polozenie_wozka(x, y):
     wozek['x'] = x
     wozek['y'] = y
 
+# i to chyba tez do wywalenia
 def polozenie_wozka():
     return wozek['x'], wozek['y']
 
@@ -70,10 +76,10 @@ def wypisz(stan_magazynu):
 #1. mamy podane 'skąd' i 'cel' oraz wózek jest wolny; przedmiot znajduje się w miejscu 'skąd' a miejsce 'cel' jest puste
 #2. kiedy nie mamy podane 'skąd', ale mamy podany 'cel' i na wózku znajduje się towar
 
-
 def przemiesc(skad=None, cel=None, przedmiot=None, polecenie=None):
     if stan_wozka() == 0 and skad != "0" and cel != "0" and przedmiot != "[]" and polecenie != "[]":
-        if "['"+miejsca[(skad)]+"']" == przedmiot and miejsca[(cel)] == 0:  #jesli na wskazanym miejscu w magazynie "skąd" jest przedmiot, to przenosimy we wskazane miejsce
+        slowo = str(miejsca[(skad)])  #zmienna przechowująca nazwe przedmiotu w magazynie, slowo[:-1] to przedmiot w magazynie bez końcówki, a przedmiot[2:-3] to przedmiot wpisany w poleceniu bez końcówki
+        if slowo[:-1] == przedmiot[2:-3] and miejsca[(cel)] == 0:  #jesli na wskazanym miejscu w magazynie "skąd" jest przedmiot, to przenosimy we wskazane miejsce
             miejsca[(cel)] = miejsca[(skad)]
             print(miejsca[(skad)])
             x = 0
@@ -88,31 +94,50 @@ def przemiesc(skad=None, cel=None, przedmiot=None, polecenie=None):
                     x += 1
                 else:
                     tab_miejsca[x] = miejsca[(skad)]
+                    # zmienia polozenie wózka - działa
+                    # =======================
+                    xy_wozka[0] = pozycje_wozka[x * 2]
+                    xy_wozka[1] = pozycje_wozka[x * 2 + 1]
+
             miejsca[(skad)] = "0"
             zmien_stan_wozka(0)
-            return ("Przeniosłem ", przedmiot," z ", skad, " na ", cel)
-        elif "['"+miejsca[(skad)]+"']" == przedmiot:
+            #wspolrzedna_x = cel[1]
+            #wspolrzedna_y = cel[0]
+            #zmien_polozenie_wozka(wspolrzedna_x, wspolrzedna_y) #wozek zmienia polozenie na miejsce odstawienia przedmiotu
+            return ("Przeniosłem ", przedmiot[2:-2]," z ", skad, " na ", cel)
+        elif slowo[:-1] != przedmiot[2:-3]:
             zmien_stan_wozka(0)
             return ("Brak wskazanego przedmiotu na podanym miejscu")
         elif miejsca[(cel)] != 0:
             zmien_stan_wozka(0)
             return ("Miejsce docelowe jest zajęte")
-    elif skad == "0" and przedmiot == "[]" and stan_wozka() == 0:
+    elif skad == "0" and przedmiot == "[]":
+        # wozek zmienia polozenie na miejsce wskazane w poleceniu ale nic nie przenosi
+        # TUTAJ PROBLEM, SKAD WSPOLRZEDNE DLA WOZKA WZIAC
         wspolrzedna_x = cel[1]
         wspolrzedna_y = cel[0]
         zmien_polozenie_wozka(wspolrzedna_x, wspolrzedna_y)
-        zmien_stan_wozka(0)
+
         return ("Jestem przy polu ", cel)
     elif stan_wozka() == 0 and skad != "0" and przedmiot != "[]" and polecenie != "[]":
-        if "['"+miejsca[(skad)]+"']" == przedmiot: # to jest pojebane, ale muszą te nawiasy być XD
+        slowo = str(miejsca[(skad)])
+        if slowo[:-1] == przedmiot[2:-3]: # to jest pojebane, ale muszą te nawiasy być XD
             x = 0
             for k in sorted(miejsca):
                 if skad != k:
                     x += 1
                 else:
                     tab_miejsca[x] = 0
+                    # zmienia polozenie wozka - działa
+                    # =======================
+                    xy_wozka[0] = pozycje_wozka[x * 2]
+                    xy_wozka[1] = pozycje_wozka[x * 2 + 1]
+
             zmien_stan_wozka(przedmiot)
-            return ("Wziąłem ", przedmiot)
+            #wspolrzedna_x = skad[1]
+            #wspolrzedna_y = skad[0]
+            #zmien_polozenie_wozka(wspolrzedna_x, wspolrzedna_y) #wozek zmienia polozenie na miejse z którego bierze przedmiot
+            return ("Wziąłem ", przedmiot[2:-2])
         else:
             zmien_stan_wozka(0)
             return("Brak wskazanego przedmiotu na podanym miejscu")
@@ -123,7 +148,7 @@ def przemiesc(skad=None, cel=None, przedmiot=None, polecenie=None):
         elif miejsca[(cel)] != 0:
             zmien_stan_wozka(przedmiot)
             return ("Miejsce docelowe jest zajęte")
-        elif miejsca[(cel)] == 0:
+        elif miejsca[(cel)] == 0 and przedmiot != "[]":
             x = 0
             for k in sorted(miejsca):
                 if cel != k:
@@ -131,33 +156,18 @@ def przemiesc(skad=None, cel=None, przedmiot=None, polecenie=None):
                 else:
                     stan =stan_wozka().replace("[", "").replace("]", "").replace("'", "")
                     tab_miejsca[x] = stan
+                    # wozek zmienia polozenie
+                    # =======================
+                    xy_wozka[0] = pozycje_wozka[x * 2]
+                    xy_wozka[1] = pozycje_wozka[x * 2 + 1]
+
             zmien_stan_wozka(0)
+            # wspolrzedna_x = cel[1]
+            # wspolrzedna_y = cel[0]
+            # zmien_polozenie_wozka(wspolrzedna_x, wspolrzedna_y) # wozek zmienia polozenie na miejsce odstawienia przedmiotu
             return("Postawiłem ", stan, " na polu ", cel)
         else:
 
             return("Nie rozumiem, doprecyzuj polecenie")
     else:
         return("error")
-
-
-""""
-#sprawdzamy, czy podane miejsce w magazynie jest wolne
-print(czy_wolne(miejsca, "b3"))
-#sprawdzamy, czy wózek jest wolny(0), czy zajety( != 0)
-print(stan_wozka())
-#ładujemy na wózek beczke
-zmien_stan_wozka("beczka")
-print(stan_wozka())
-#i ją ściągamy
-zmien_stan_wozka(0)
-print(stan_wozka())
-#polozenie wózka
-print(polozenie_wozka())
-#zmieniami
-zmien_polozenie_wozka(50, 60)
-print(polozenie_wozka())
-
-miejsca_do_tablicy(miejsca)
-print(tab_miejsca)
-
-"""

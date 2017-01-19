@@ -6,7 +6,7 @@ def przeszukujPolecenie(polecenie, komenda):  # przeszukujemy polecenia, zwracam
     for i in range(len(komenda)):
         for j in range(len(polecenie)):  # szukanie polecenia do pierwszego wystapienia
             if komenda[i] == polecenie[j]:
-                s.append(komenda[i])
+                s.append(polecenie[j-j%3]) #dzięki j-j%3 zawsze będzie brał mianownik :)
     return s
 
 # tutaj udało się dać "z" jako parametr

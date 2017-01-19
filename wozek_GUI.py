@@ -51,6 +51,9 @@ w.place(x=5, y=300)
 
 #rysuje czarny wózek na dole
 woz = w.create_rectangle(magazyn.xy_wozka[0], magazyn.xy_wozka[1], magazyn.xy_wozka[0]+45, magazyn.xy_wozka[1]+25, fill="black")
+#zawartość wózka - label
+lbl_zawartosc_wozka = Label(w, text="Pusty")
+lbl_zawartosc_wozka.place(x=magazyn.xy_wozka[0]+5, y=magazyn.xy_wozka[1]+5)
 
 rysuj_magazyn()
 
@@ -109,11 +112,27 @@ def wykonaj():
 
     # wozek - zmienia koordynaty
     w.coords(woz, magazyn.xy_wozka[0], magazyn.xy_wozka[1]-25, magazyn.xy_wozka[0]+45, magazyn.xy_wozka[1])
-    # wozek - zmienia kolor zaleznie od jego stanu
-    if magazyn.stan_wozka() != 0:
-        w.itemconfig(woz, fill="red")
-    elif magazyn.stan_wozka() == 0:
+    # wozek - zmienia kolor i napis zaleznie od jego stanu
+    if magazyn.stan_wozka() == 0:
         w.itemconfig(woz, fill="black")
+        lbl_zawartosc_wozka.place(x=magazyn.xy_wozka[0] + 5, y=magazyn.xy_wozka[1] + 5)
+        lbl_zawartosc_wozka.config(text="Pusty")
+    elif stan_wozka[2:5] == 'bec':
+        w.itemconfig(woz, fill="red")
+        lbl_zawartosc_wozka.place(x=magazyn.xy_wozka[0], y=magazyn.xy_wozka[1])
+        lbl_zawartosc_wozka.config(text="Beczka")
+    elif stan_wozka[2:5] == 'pus':
+        w.itemconfig(woz, fill="red")
+        lbl_zawartosc_wozka.place(x=magazyn.xy_wozka[0], y=magazyn.xy_wozka[1])
+        lbl_zawartosc_wozka.config(text="Puszka")
+    elif stan_wozka[2:5] == 'pud':
+        w.itemconfig(woz, fill="red")
+        lbl_zawartosc_wozka.place(x=magazyn.xy_wozka[0], y=magazyn.xy_wozka[1])
+        lbl_zawartosc_wozka.config(text="Pudełko")
+    elif stan_wozka[2:5] == 'but':
+        w.itemconfig(woz, fill="red")
+        lbl_zawartosc_wozka.place(x=magazyn.xy_wozka[0], y=magazyn.xy_wozka[1])
+        lbl_zawartosc_wozka.config(text="Butelka")
 
 lbl_pol = Label(okno, text = "Wpisz polecenie: ")
 lbl_pol.place(x=5, y=20)

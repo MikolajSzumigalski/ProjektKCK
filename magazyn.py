@@ -156,6 +156,7 @@ def przemiesc(skad=None, cel=None, przedmiot=None, polecenie=None):
                 else:
                     stan =stan_wozka().replace("[", "").replace("]", "").replace("'", "")
                     tab_miejsca[x] = stan
+                    miejsca[(cel)] = stan
                     # wozek zmienia polozenie
                     # =======================
                     xy_wozka[0] = pozycje_wozka[x * 2]

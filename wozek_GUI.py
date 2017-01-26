@@ -33,10 +33,14 @@ def rysuj_magazyn():
                 w.create_rectangle(x + 10, y + 25, x + 35, y + 50, fill="lightblue")
                 w.create_rectangle(x + 18, y + 15, x + 27, y + 25, fill="lightblue")
                 w.create_text(x + 22, y + 38, fill="black", font="Times 15 italic bold", text="B")
-            else:
+            elif magazyn.tab_miejsca[i] == "opona":
                 w.create_rectangle(x, y, x + 45, y + 65, fill="grey")
                 w.create_oval(x + 10, y + 20, x + 35, y + 45, fill="black")
                 w.create_text(x + 22, y + 34, fill="white", font="Times 15 italic bold", text="O")
+            else:
+                w.create_rectangle(x, y, x + 45, y + 65, fill="grey")
+                w.create_oval(x + 10, y + 20, x + 35, y + 45, fill="black")
+                w.create_text(x + 22, y + 34, fill="white", font="Times 15 italic bold", text="X")
             magazyn.pozycje_wozka.append(x)
             magazyn.pozycje_wozka.append(y)
             i += 1
@@ -108,7 +112,8 @@ def wykonaj():
 
     print(magazyn.tab_miejsca)
     print(magazyn.stan_wozka())
-    print(magazyn.polozenie_wozka())
+
+    magazyn.wypisz(magazyn.miejsca)
 
     # wozek - zmienia koordynaty
     w.coords(woz, magazyn.xy_wozka[0], magazyn.xy_wozka[1]-25, magazyn.xy_wozka[0]+45, magazyn.xy_wozka[1])
@@ -133,6 +138,10 @@ def wykonaj():
         w.itemconfig(woz, fill="red")
         lbl_zawartosc_wozka.place(x=magazyn.xy_wozka[0], y=magazyn.xy_wozka[1])
         lbl_zawartosc_wozka.config(text="Butelka")
+    elif stan_wozka[2:5] == 'opo':
+        w.itemconfig(woz, fill="red")
+        lbl_zawartosc_wozka.place(x=magazyn.xy_wozka[0], y=magazyn.xy_wozka[1])
+        lbl_zawartosc_wozka.config(text="Opona")
 
 lbl_pol = Label(okno, text = "Wpisz polecenie: ")
 lbl_pol.place(x=5, y=20)

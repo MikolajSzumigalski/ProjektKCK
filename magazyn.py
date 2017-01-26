@@ -93,13 +93,13 @@ def przemiesc(skad=None, cel=None, przedmiot=None, polecenie=None):
                 if cel != k:
                     x += 1
                 else:
+                    miejsca[(cel)] = miejsca[(skad)]
                     tab_miejsca[x] = miejsca[(skad)]
                     # zmienia polozenie wózka - działa
                     # =======================
                     xy_wozka[0] = pozycje_wozka[x * 2]
                     xy_wozka[1] = pozycje_wozka[x * 2 + 1]
-
-            miejsca[(skad)] = "0"
+            miejsca[(skad)] = 0
             zmien_stan_wozka(0)
             #wspolrzedna_x = cel[1]
             #wspolrzedna_y = cel[0]
@@ -111,17 +111,26 @@ def przemiesc(skad=None, cel=None, przedmiot=None, polecenie=None):
         elif miejsca[(cel)] != 0:
             zmien_stan_wozka(0)
             return ("Miejsce docelowe jest zajęte")
-    elif skad == "0" and przedmiot == "[]":
-        # wozek zmienia polozenie na miejsce wskazane w poleceniu ale nic nie przenosi
-        # TUTAJ PROBLEM, SKAD WSPOLRZEDNE DLA WOZKA WZIAC
-        wspolrzedna_x = cel[1]
-        wspolrzedna_y = cel[0]
-        zmien_polozenie_wozka(wspolrzedna_x, wspolrzedna_y)
+    elif skad == "0" and przedmiot == "[]" and polecenie == '[]' and cel != "0":
+        x = 0
+        for k in sorted(miejsca):
+            if cel != k:
+                x += 1
+            else:
+                # zmienia polozenie wózka - działa
+                # =======================
+                xy_wozka[0] = pozycje_wozka[x * 2]
+                xy_wozka[1] = pozycje_wozka[x * 2 + 1]
 
         return ("Jestem przy polu ", cel)
+    elif skad == "0" and przedmiot == "[]" and polecenie == '[]' and cel == "0":
+        return("Nie rozumiem, doprecyzuj polecenie")
     elif stan_wozka() == 0 and skad != "0" and przedmiot != "[]" and polecenie != "[]":
-        slowo = str(miejsca[(skad)])
-        if slowo[:-1] == przedmiot[2:-3]: # to jest pojebane, ale muszą te nawiasy być XD
+        slowo = str(miejsca[skad])
+        print(miejsca[skad])
+        print(slowo)
+        print(wozek['stan'])
+        if slowo[:-1] == przedmiot[2:-3]:
             x = 0
             for k in sorted(miejsca):
                 if skad != k:
@@ -134,11 +143,13 @@ def przemiesc(skad=None, cel=None, przedmiot=None, polecenie=None):
                     xy_wozka[1] = pozycje_wozka[x * 2 + 1]
 
             zmien_stan_wozka(przedmiot)
+
             #wspolrzedna_x = skad[1]
             #wspolrzedna_y = skad[0]
             #zmien_polozenie_wozka(wspolrzedna_x, wspolrzedna_y) #wozek zmienia polozenie na miejse z którego bierze przedmiot
+            miejsca[(skad)] = 0
             return ("Wziąłem ", przedmiot[2:-2])
-        else:
+        else :
             zmien_stan_wozka(0)
             return("Brak wskazanego przedmiotu na podanym miejscu")
     elif stan_wozka() != 0:
@@ -156,19 +167,20 @@ def przemiesc(skad=None, cel=None, przedmiot=None, polecenie=None):
                 else:
                     stan =stan_wozka().replace("[", "").replace("]", "").replace("'", "")
                     tab_miejsca[x] = stan
-                    miejsca[(cel)] = stan
+                    q = str(wozek['stan'])
+                    miejsca[(cel)] = q[2:-2]
                     # wozek zmienia polozenie
                     # =======================
                     xy_wozka[0] = pozycje_wozka[x * 2]
                     xy_wozka[1] = pozycje_wozka[x * 2 + 1]
 
             zmien_stan_wozka(0)
-            # wspolrzedna_x = cel[1]
-            # wspolrzedna_y = cel[0]
-            # zmien_polozenie_wozka(wspolrzedna_x, wspolrzedna_y) # wozek zmienia polozenie na miejsce odstawienia przedmiotu
+
             return("Postawiłem ", stan, " na polu ", cel)
         else:
 
             return("Nie rozumiem, doprecyzuj polecenie")
+    elif polecenie == '[]' and cel == 0:
+        return ("Nie rozumiem, doprecyzuj polecenie")
     else:
         return("error")

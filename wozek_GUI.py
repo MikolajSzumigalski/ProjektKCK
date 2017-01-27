@@ -2,6 +2,7 @@ import otwieracz, magazyn, szukacz
 from tkinter import * #biblioteka ktora obsluguje GUI
 slownik_przedmiot = otwieracz.potnijPlik("przedmiot.txt")
 slownik_polecenie = otwieracz.potnijPlik("czynnosci.txt")
+slownik_polecenie2 = otwieracz.potnijPlik("czynnosci2.txt")
 slownik_magazyn = otwieracz.klucze(magazyn.miejsca)
 
 # szerokosc magazynu - 580px, wysokosc - 450px, 9 kolumn 4 rzedy
@@ -47,11 +48,43 @@ def rysuj_magazyn():
 
 #inicjuje GUI
 okno = Tk()
-okno.geometry("600x800")
+okno.geometry("800x800")
 okno.title("Widlak")
 
-w = Canvas(okno, width=580, height=450, bg="yellow")
+w = Canvas(okno, width=790, height=450, bg="yellow")
 w.place(x=5, y=300)
+
+# LEGENDA:
+lbl_legenda = Label(w, text="Legenda:")
+lbl_legenda.place(x=600, y=30)
+# BECZKA
+w.create_rectangle(600 + 10, 40 + 15, 600 + 35, 40 + 50, fill="brown")
+w.create_rectangle(600 + 10, 40 + 20, 600 + 35, 40 + 23, fill="black")
+w.create_rectangle(600 + 10, 40 + 40, 600 + 35, 40 + 43, fill="black")
+w.create_text(600+22, 40+32, fill="black", font="Times 15 italic bold", text="B")
+lbl_beczka = Label(w, text="Beczka")
+lbl_beczka.place(x=650, y=65)
+#PUSZKA
+w.create_rectangle(600 + 10, 80 + 15, 600 + 35, 80 + 50, fill="darkgrey")
+w.create_text(600 + 22, 80 + 32, fill="black", font="Times 15 italic bold", text="P")
+lbl_puszka = Label(w, text="Puszka")
+lbl_puszka.place(x=650, y=105)
+# PUDEŁKO
+w.create_rectangle(600 + 10, 120 + 20, 600 + 35, 120 + 45, fill="red")
+w.create_text(600 + 22, 120 + 35, fill="black", font="Times 15 italic bold", text="P")
+lbl_pudelko = Label(w, text="Pudełko")
+lbl_pudelko.place(x=650, y=145)
+#BUTELKA
+w.create_rectangle(600 + 10, 160 + 25, 600 + 35, 160 + 50, fill="lightblue")
+w.create_rectangle(600 + 18, 160 + 15, 600 + 27, 160 + 25, fill="lightblue")
+w.create_text(600 + 22, 160 + 38, fill="black", font="Times 15 italic bold", text="B")
+lbl_butelka = Label(w, text="Butelka")
+lbl_butelka.place(x=650, y=185)
+#OPONA
+w.create_oval(600 + 10, 200 + 20, 600 + 35, 200 + 45, fill="black")
+w.create_text(600 + 22, 200 + 34, fill="white", font="Times 15 italic bold", text="O")
+lbl_opona = Label(w, text="Opona")
+lbl_opona.place(x=650, y=225)
 
 #rysuje czarny wózek na dole
 woz = w.create_rectangle(magazyn.xy_wozka[0], magazyn.xy_wozka[1], magazyn.xy_wozka[0]+45, magazyn.xy_wozka[1]+25, fill="black")
@@ -67,6 +100,7 @@ def wykonaj():
     rozkaz_pociete = [w.replace(',', '').replace('.', '') for w in rozkaz_pociete]
 
     polecenie_szukaj = str(szukacz.przeszukujPolecenie(slownik_polecenie, rozkaz_pociete))
+    polecenie2_szukaj = str(szukacz.przeszukujPolecenie(slownik_polecenie2, rozkaz_pociete))
     przedmiot_szukaj = str(szukacz.przeszukujPolecenie(slownik_przedmiot, rozkaz_pociete))
 
     miejsce_skad = str(szukacz.przeszukujMiejsceSkad(slownik_magazyn, rozkaz_pociete, "z"))
@@ -94,10 +128,10 @@ def wykonaj():
     txt_polecenie.insert(0.0, polecenie)
 
     efekt = ""
-    efekt += str(magazyn.przemiesc(miejsce_skad, miejsce_dokad, przedmiot_szukaj, polecenie_szukaj))
+    efekt += str(magazyn.przemiesc(miejsce_skad, miejsce_dokad, przedmiot_szukaj, polecenie_szukaj, polecenie2_szukaj))
     txt_efekt.delete(0.0, END)
     txt_efekt.insert(0.0, efekt)
-    magazyn.przemiesc(miejsce_skad, miejsce_dokad, przedmiot_szukaj, polecenie_szukaj)
+    magazyn.przemiesc(miejsce_skad, miejsce_dokad, przedmiot_szukaj, polecenie_szukaj, polecenie2_szukaj)
     # magazyn.wypisz(magazyn.miejsca)
 
     cel = szukacz.przeszukujMiejsceDokad(slownik_magazyn, rozkaz_pociete)
@@ -178,7 +212,7 @@ txt_dokad.place(x=120, y=200)
 
 lbl_efekt = Label(okno, text="Efekt: ")
 lbl_efekt.place(x=5, y=230)
-txt_efekt = Text(okno, width=30, height=2, wrap=WORD)
+txt_efekt = Text(okno, width=30, height=3, wrap=WORD)
 txt_efekt.place(x=120, y=230)
 
 okno.mainloop()
